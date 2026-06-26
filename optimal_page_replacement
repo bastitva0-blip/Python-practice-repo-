@@ -1,0 +1,33 @@
+def optimal_page_replacement(pages, capacity):
+    memory = []
+    page_faults = 0
+    
+    print("\nOptimal Execution:")
+    for i, page in enumerate(pages):
+        if page not in memory:
+            if len(memory) < capacity:
+                memory.append(page)
+            else:
+                # Find page to replace based on future use
+                index_to_replace = -1
+                farthest_use = -1
+                
+                for m_idx, m_page in enumerate(memory):
+                    try:
+                        next_use = pages[i+1:].index(m_page)
+                    except ValueError:
+                        next_use = float('inf') # Will not be used again
+                        
+                    if next_use > farthest_use:
+                        farthest_use = next_use
+                        index_to_replace = m_idx
+                        
+                memory[index_to_replace] = page
+            page_faults += 1
+            print(f"Page {page} -> Fault: {memory}")
+        else:
+            print(f"Page {page} -> Hit  : {memory}")
+            
+    print(f"Total Page Faults: {page_faults}")
+
+optimal_page_replacement([7, 0, 1, 2, 0, 3, 0, 4, 2, 3, 0, 3], capacity=3)
