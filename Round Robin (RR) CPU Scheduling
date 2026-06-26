@@ -1,0 +1,53 @@
+from collections import deque
+
+def round_robin_scheduling(arrival_time, burst_time, quantum):
+    n = len(arrival_time)
+    remaining_time = list(burst_time)
+    completion_time = [0] * n
+    turnaround_time = [0] * n
+    waiting_time = [0] * n
+    
+    queue = deque()
+    visited = [False] * n
+    
+    current_time = 0
+    completed_count = 0
+    
+    # Push initial processes arriving at 0
+    for i in range(n):
+        if arrival_time[i] <= current_time:
+            queue.append(i)
+            visited[i] = True
+            
+    while completed_count < n:
+        if queue:
+            idx = queue.popleft()
+            
+            # Execute for quantum or remaining time
+            slice_time = min(remaining_time[idx], quantum)
+            remaining_time[idx] -= slice_time
+            current_time += slice_time
+            
+            # Check for new arrivals during execution
+            for i in range(n):
+                if arrival_time[i] <= current_time and not visited[i]:
+                    queue.append(i)
+                    visited[i] = True
+                    
+            if remaining_time[idx] > 0:
+                queue.append(idx)
+            else:
+                completion_time[idx] = current_time
+                turnaround_time[idx] = completion_time[idx] - arrival_time[idx]
+                waiting_time[idx] = turnaround_time[idx] - burst_time[idx]
+                completed_count += 1
+        else:
+            current_time += 1
+            for i in range(n):
+                if arrival_time[i] <= current_time and not visited[i]:
+                    queue.append(i)
+                    visited[i] = True
+
+    print_scheduling_table(arrival_time, burst_time, completion_time, turnaround_time, waiting_time)
+
+round_robin_scheduling(arrival_time=[0, 1, 2], burst_time=[5, 4, 2], quantum=2)
