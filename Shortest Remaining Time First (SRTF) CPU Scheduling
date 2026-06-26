@@ -1,0 +1,34 @@
+def srtf_scheduling(arrival_time, burst_time):
+    n = len(arrival_time)
+    remaining_time = list(burst_time)
+    completion_time = [0] * n
+    turnaround_time = [0] * n
+    waiting_time = [0] * n
+    
+    current_time = 0
+    completed_count = 0
+    
+    while completed_count < n:
+        idx = -1
+        min_rt = float('inf')
+        
+        for i in range(n):
+            if arrival_time[i] <= current_time and remaining_time[i] > 0:
+                if remaining_time[i] < min_rt:
+                    min_rt = remaining_time[i]
+                    idx = i
+                    
+        if idx != -1:
+            remaining_time[idx] -= 1
+            current_time += 1
+            if remaining_time[idx] == 0:
+                completion_time[idx] = current_time
+                turnaround_time[idx] = completion_time[idx] - arrival_time[idx]
+                waiting_time[idx] = turnaround_time[idx] - burst_time[idx]
+                completed_count += 1
+        else:
+            current_time += 1
+            
+    print_scheduling_table(arrival_time, burst_time, completion_time, turnaround_time, waiting_time)
+
+srtf_scheduling(arrival_time=[0, 1, 2, 3], burst_time=[8, 4, 9, 5])
