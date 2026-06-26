@@ -1,0 +1,29 @@
+def fcfs_scheduling(arrival_time, burst_time):
+    n = len(arrival_time)
+    completion_time = [0] * n
+    turnaround_time = [0] * n
+    waiting_time = [0] * n
+    
+    # Sort processes by arrival time
+    processes = sorted(range(n), key=lambda k: arrival_time[k])
+    
+    current_time = 0
+    for i in processes:
+        if current_time < arrival_time[i]:
+            current_time = arrival_time[i]
+        current_time += burst_time[i]
+        completion_time[i] = current_time
+        turnaround_time[i] = completion_time[i] - arrival_time[i]
+        waiting_time[i] = turnaround_time[i] - burst_time[i]
+        
+    print_scheduling_table(arrival_time, burst_time, completion_time, turnaround_time, waiting_time)
+
+def print_scheduling_table(at, bt, ct, tat, wt):
+    print("PID\tAT\tBT\tCT\tTAT\tWT")
+    for i in range(len(at)):
+        print(f"P{i+1}\t{at[i]}\t{bt[i]}\t{ct[i]}\t{tat[i]}\t{wt[i]}")
+    print(f"\nAverage TAT: {sum(tat)/len(tat):.2f}")
+    print(f"Average WT: {sum(wt)/len(wt):.2f}\n")
+
+# Example Execution
+fcfs_scheduling(arrival_time=[0, 1, 2], burst_time=[5, 3, 8])
