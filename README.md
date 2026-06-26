@@ -2,6 +2,7 @@
 This repository contains basic Python practice questions i made during my study.
 BASIC MATHS:
 1) basic calculator 
+
 OPERATING SYSTEM:
 1. WAP to implement first come first serve (FCFS) CPU Scheduling Algorithms
 2. WAP to implement shortest job first (SJF) CPU Scheduling Algorithms 
