@@ -1,0 +1,33 @@
+def sjf_scheduling(arrival_time, burst_time):
+    n = len(arrival_time)
+    completed = [False] * n
+    completion_time = [0] * n
+    turnaround_time = [0] * n
+    waiting_time = [0] * n
+    
+    current_time = 0
+    completed_count = 0
+    
+    while completed_count < n:
+        idx = -1
+        min_bt = float('inf')
+        
+        for i in range(n):
+            if arrival_time[i] <= current_time and not completed[i]:
+                if burst_time[i] < min_bt:
+                    min_bt = burst_time[i]
+                    idx = i
+                    
+        if idx != -1:
+            current_time += burst_time[idx]
+            completion_time[idx] = current_time
+            turnaround_time[idx] = completion_time[idx] - arrival_time[idx]
+            waiting_time[idx] = turnaround_time[idx] - burst_time[idx]
+            completed[idx] = True
+            completed_count += 1
+        else:
+            current_time += 1
+            
+    print_scheduling_table(arrival_time, burst_time, completion_time, turnaround_time, waiting_time)
+
+sjf_scheduling(arrival_time=[1, 2, 3, 4], burst_time=[6, 8, 7, 3])
