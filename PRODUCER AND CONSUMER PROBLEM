@@ -1,0 +1,45 @@
+#include <stdio.h>
+#include <pthread.h>
+#include <semaphore.h>
+
+#define BUFFER_SIZE 5
+int buffer[BUFFER_SIZE];
+int in = 0, out = 0;
+
+sem_t empty;  // Counts available empty slots (initially BUFFER_SIZE)
+sem_t full;   // Counts available items (initially 0)
+sem_t mutex;  // Ensures exclusive access to the buffer (initially 1)
+
+void* producer(void* param) {
+    int item;
+    while (1) {
+        item = rand() % 100; // Produce an item
+        
+        sem_wait(&empty); // Wait for an empty slot
+        sem_wait(&mutex); // Lock the buffer
+        
+        // Critical Section: Add item to buffer
+        buffer[in] = item;
+        in = (in + 1) % BUFFER_SIZE;
+        
+        sem_post(&mutex); // Unlock the buffer
+        sem_post(&full);  // Increment the count of full slots
+    }
+}
+
+void* consumer(void* param) {
+    int item;
+    while (1) {
+        sem_wait(&full);  // Wait for an item to be available
+        sem_wait(&mutex); // Lock the buffer
+        
+        // Critical Section: Remove item from buffer
+        item = buffer[out];
+        out = (out + 1) % BUFFER_SIZE;
+        
+        sem_post(&mutex); // Unlock the buffer
+        sem_post(&empty); // Increment the count of empty slots
+        
+        // Consume the item
+    }
+}
