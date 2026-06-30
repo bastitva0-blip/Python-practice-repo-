@@ -10,3 +10,5 @@ OPERATING SYSTEM:
 8. WAP to implement LRU Page Replacement Algorithm
 9. WAP to implement OPTIMAL Page Replacement Algorithm
 10. Simulate Paging Technique of Memory Management.
+11.Dining-Philosophers Problem
+12. PRODUCT AND CONSUMER PROBLEM
