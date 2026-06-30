@@ -12,3 +12,5 @@ OPERATING SYSTEM:
 10. Simulate Paging Technique of Memory Management.
 11.Dining-Philosophers Problem
 12. PRODUCT AND CONSUMER PROBLEM
+13. Sleeping Barber Problem
+14. Readers and Writers Problem
